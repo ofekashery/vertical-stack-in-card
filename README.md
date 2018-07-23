@@ -20,7 +20,6 @@ Vertical Stack In Card allows you to group multiple cards in one card.
         - sensor.temperature_sensor
         - sensor.humidity_sensor
         - sensor.motion_sensor
-
     - type: entities
       entities:
        - switch.livingroom_tv
