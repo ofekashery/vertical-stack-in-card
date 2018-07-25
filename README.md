@@ -8,12 +8,14 @@ Vertical Stack In Card allows you to group multiple cards in one card.
 | Name | Type | Default | Description
 | ---- | ---- | ------- | -----------
 | type | string | **Required** | `custom:vertical-stack-in-card`
-| cards | string | **Required** | List of cards
+| cards | list | **Required** | List of cards
+| title | string | **Optional** | Card title
 
 **Example**
 
 ```yaml
 - type: custom:vertical-stack-in-card
+  title: My Card
   cards:
     - type: glance
       entities:
