@@ -18,7 +18,7 @@ Vertical Stack In Card allows you to group multiple cards in one card.
 Bash:
 ```bash
 wget https://raw.githubusercontent.com/custom-cards/vertical-stack-in-card/master/vertical-stack-in-card.js
-mv vertical-stack-in-card /config/www/
+mv vertical-stack-in-card.js /config/www/
 ```
 
 2. Link `vertical-stack-in-card` inside you `ui-lovelace.yaml` 
