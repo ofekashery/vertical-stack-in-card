@@ -21,6 +21,13 @@ class VerticalStackInCard extends HTMLElement {
 
         const cardConfig = Object.assign({}, config);
         this._refCards = []
+        if (config.title) {
+            const title = document.createElement("div");
+            title.className = "header";
+            title.style = "font-family: var(--paper-font-headline_-_font-family); -webkit-font-smoothing: var(--paper-font-headline_-_-webkit-font-smoothing); font-size: var(--paper-font-headline_-_font-size); font-weight: var(--paper-font-headline_-_font-weight); letter-spacing: var(--paper-font-headline_-_letter-spacing); line-height: var(--paper-font-headline_-_line-height);text-rendering: var(--paper-font-common-expensive-kerning_-_text-rendering);opacity: var(--dark-primary-opacity);padding: 24px 16px 0px 16px";
+            title.innerHTML = '<div class="name">' + config.title + '</div>';
+            root.appendChild(title);
+        }
         let element;
         config.cards.forEach(item => {
             if (item.type.startsWith("custom:")){
@@ -39,6 +46,9 @@ class VerticalStackInCard extends HTMLElement {
         const config = this._config;
         const root = this.shadowRoot;
         let index = 0;
+        if (config.title) {
+          index++;
+        }
         config.cards.forEach(item => {
             root.childNodes[index].hass = hass;
             if (root.childNodes[index].shadowRoot) {
