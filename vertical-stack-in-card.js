@@ -24,9 +24,9 @@ class VerticalStackInCard extends HTMLElement {
         let element;
         config.cards.forEach(item => {
             if (item.type.startsWith("custom:")){
-              element = document.createElement(`${item.type.substr("custom:".length)}`);
+                element = document.createElement(`${item.type.substr("custom:".length)}`);
             } else {
-              element = document.createElement(`hui-${item.type}-card`);
+                element = document.createElement(`hui-${item.type}-card`);
             }
             element.setConfig(item);
             root.appendChild(element);
@@ -40,9 +40,7 @@ class VerticalStackInCard extends HTMLElement {
         const root = this.shadowRoot;
         let index = 0;
         config.cards.forEach(item => {
-
             root.childNodes[index].hass = hass;
-
             if (root.childNodes[index].shadowRoot) {
                 if (!root.childNodes[index].shadowRoot.querySelector('ha-card')) {
                     var searchEles = root.childNodes[index].shadowRoot.getElementById("root").childNodes;
@@ -50,9 +48,6 @@ class VerticalStackInCard extends HTMLElement {
                         searchEles[i].style.margin = "0px";
                         searchEles[i].shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
                         searchEles[i].shadowRoot.querySelector('ha-card').style.paddingBottom = '0px';
-                        if (item.type != "vertical-stack") {
-                            searchEles[i].shadowRoot.querySelector('ha-card').style.paddingTop = '0px';
-                        }
                     }
                 } else {
                     root.childNodes[index].shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
