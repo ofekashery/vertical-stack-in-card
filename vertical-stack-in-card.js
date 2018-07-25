@@ -23,7 +23,12 @@ class VerticalStackInCard extends HTMLElement {
         this._refCards = []
         let element;
         config.cards.forEach(item => {
-            element = document.createElement(`hui-${item.type}-card`);
+            if (item.type.startsWith("custom:")){
+              element = document.createElement(`${item.type.substr("custom:".length)}`);
+            } else {
+              element = document.createElement(`hui-${item.type}-card`);
+            }
+            element.setConfig(item);
             root.appendChild(element);
             this._refCards.push(element);
         });
@@ -34,17 +39,9 @@ class VerticalStackInCard extends HTMLElement {
         const config = this._config;
         const root = this.shadowRoot;
         let index = 0;
-        let stack_index = 0;
         config.cards.forEach(item => {
 
-            if (item.type === "vertical-stack" || item.type === "horizontal-stack"){
-                root.childNodes[stack_index].setConfig(item);
-                root.childNodes[stack_index].hass = hass;
-                stack_index++;
-            } else {
-                root.childNodes[index].setConfig(item);
-                root.childNodes[index].hass = hass;
-            }
+            root.childNodes[index].hass = hass;
 
             if (root.childNodes[index].shadowRoot) {
                 if (!root.childNodes[index].shadowRoot.querySelector('ha-card')) {
