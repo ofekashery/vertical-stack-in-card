@@ -1,6 +1,7 @@
 class VerticalStackInCard extends HTMLElement {
     constructor() {
         super();
+        this._items = 0;
         // Make use of shadowRoot to avoid conflicts when reusing
         this.attachShadow({ mode: 'open' });
     }
@@ -47,7 +48,7 @@ class VerticalStackInCard extends HTMLElement {
         const root = this.shadowRoot;
         let index = 0;
         if (config.title) {
-          index++;
+            index++;
         }
         config.cards.forEach(item => {
             root.childNodes[index].hass = hass;
@@ -62,7 +63,7 @@ class VerticalStackInCard extends HTMLElement {
                 } else {
                     root.childNodes[index].shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
                     root.childNodes[index].shadowRoot.querySelector('ha-card').style.paddingBottom = '0px';
-                    if(index > 0) {
+                    if(index > 0 && !config.title) {
                         root.childNodes[index].shadowRoot.querySelector('ha-card').style.paddingTop = '0px';
                     }
                 }
@@ -72,7 +73,11 @@ class VerticalStackInCard extends HTMLElement {
     }
 
     getCardSize() {
-        return 1;
+        let totalSize = 0;
+        this._refCards.forEach((element) => {
+            totalSize += typeof element.getCardSize === 'function' ? element.getCardSize() : 1;
+        });
+        return totalSize;
     }
 }
 customElements.define('vertical-stack-in-card', VerticalStackInCard);
