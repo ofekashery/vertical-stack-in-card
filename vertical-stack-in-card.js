@@ -43,9 +43,10 @@ class VerticalStackInCard extends HTMLElement {
         this._config = cardConfig;
     }
 
-    set hass(hass) {
+    connectedCallback() {
         const config = this._config;
         const root = this.shadowRoot;
+        const hass = this.hass;
         let index = 0;
         if (config.title) {
             index++;
