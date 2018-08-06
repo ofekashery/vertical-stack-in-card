@@ -44,6 +44,14 @@ class VerticalStackInCard extends HTMLElement {
     }
 
     set hass(hass) {
+        if (this._refCards) {
+            this._refCards.forEach((card) => {
+                card.hass = hass;
+            });
+        }
+    }
+
+    connectedCallback() {
         const config = this._config;
         const root = this.shadowRoot;
         let index = 0;
@@ -51,7 +59,6 @@ class VerticalStackInCard extends HTMLElement {
             index++;
         }
         config.cards.forEach(item => {
-            root.childNodes[index].hass = hass;
             if (root.childNodes[index].shadowRoot) {
                 if (!root.childNodes[index].shadowRoot.querySelector('ha-card')) {
                     var searchEles = root.childNodes[index].shadowRoot.getElementById("root").childNodes;
