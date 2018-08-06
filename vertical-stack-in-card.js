@@ -55,9 +55,9 @@ class VerticalStackInCard extends HTMLElement {
         this._refCards.forEach((element) => {
             if (element.shadowRoot) {
                 if (!element.shadowRoot.querySelector('ha-card')) {
-                    var searchEles = root.childNodes[index].shadowRoot.getElementById("root");
+                    var searchEles = element.shadowRoot.getElementById("root");
                     if (!searchEles) {
-                        searchEles = root.childNodes[index].shadowRoot.getElementById("card");
+                        searchEles = element.shadowRoot.getElementById("card");
                     }
                     searchEles = searchEles.childNodes;
                     for(var i = 0; i < searchEles.length; i++) {
@@ -68,7 +68,6 @@ class VerticalStackInCard extends HTMLElement {
                 } else {
                     element.shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
                     element.shadowRoot.querySelector('ha-card').style.paddingBottom = '0px';
-                    element.shadowRoot.querySelector('ha-card').style.paddingTop = '0px';
                 }
             }
         });
