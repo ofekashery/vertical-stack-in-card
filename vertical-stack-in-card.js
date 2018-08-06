@@ -13,7 +13,7 @@ class VerticalStackInCard extends HTMLElement {
         this.style.boxShadow = "0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.15)";
         this.style.borderRadius = "2px";
         this.style.paddingBottom = "16px";
-        this.style.background = "#fff";
+        this.style.background = "var(--paper-card-background-color)";
 
         const root = this.shadowRoot;
         while (root.lastChild) {
@@ -53,10 +53,12 @@ class VerticalStackInCard extends HTMLElement {
 
     connectedCallback() {
         this._refCards.forEach((element) => {
-            element.hass = hass;
             if (element.shadowRoot) {
                 if (!element.shadowRoot.querySelector('ha-card')) {
-                    const searchEles = element.shadowRoot.getElementById("root").childNodes;
+                    var searchEles = root.childNodes[index].shadowRoot.getElementById("root");
+                    if (!searchEles) searchEles = root.childNodes[index].shadowRoot.getElementById("card") {
+                        searchEles = searchEles.childNodes;
+                    }
                     for(let i = 0; i < searchEles.length; i++) {
                         searchEles[i].style.margin = "0px";
                         searchEles[i].shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
