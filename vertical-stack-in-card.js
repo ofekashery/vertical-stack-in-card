@@ -52,31 +52,23 @@ class VerticalStackInCard extends HTMLElement {
     }
 
     connectedCallback() {
-        const config = this._config;
-        const root = this.shadowRoot;
-        let index = 0;
-        if (config.title) {
-            index++;
-        }
-        config.cards.forEach(item => {
-            if (root.childNodes[index].shadowRoot) {
-                if (!root.childNodes[index].shadowRoot.querySelector('ha-card')) {
-                    var searchEles = root.childNodes[index].shadowRoot.getElementById("root").childNodes;
-                    for(var i = 0; i < searchEles.length; i++) {
+        this._refCards.forEach((element) => {
+            element.hass = hass;
+            if (element.shadowRoot) {
+                if (!element.shadowRoot.querySelector('ha-card')) {
+                    const searchEles = element.shadowRoot.getElementById("root").childNodes;
+                    for(let i = 0; i < searchEles.length; i++) {
                         searchEles[i].style.margin = "0px";
                         searchEles[i].shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
                         searchEles[i].shadowRoot.querySelector('ha-card').style.paddingBottom = '0px';
                     }
                 } else {
-                    root.childNodes[index].shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
-                    root.childNodes[index].shadowRoot.querySelector('ha-card').style.paddingBottom = '0px';
-                    if(index > 0 && !config.title) {
-                        root.childNodes[index].shadowRoot.querySelector('ha-card').style.paddingTop = '0px';
-                    }
+                    element.shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
+                    element.shadowRoot.querySelector('ha-card').style.paddingBottom = '0px';
+                    element.shadowRoot.querySelector('ha-card').style.paddingTop = '0px';
                 }
             }
-            index++;
-        })
+        });
     }
 
     getCardSize() {
