@@ -1,4 +1,4 @@
-## 0.0.3
+## 0.0.4
 - Closing issue [#5](https://github.com/custom-cards/vertical-stack-in-card/issues/5)
 - Fix for conditional card.
 - Fix Theme.
