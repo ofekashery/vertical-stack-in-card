@@ -54,7 +54,10 @@ class VerticalStackInCard extends HTMLElement {
             root.childNodes[index].hass = hass;
             if (root.childNodes[index].shadowRoot) {
                 if (!root.childNodes[index].shadowRoot.querySelector('ha-card')) {
-                    var searchEles = root.childNodes[index].shadowRoot.getElementById("root").childNodes;
+                    var searchEles = root.childNodes[index].shadowRoot.getElementById("root");
+                    if (!searchEles) searchEles = root.childNodes[index].shadowRoot.getElementById("card") {
+                        searchEles = searchEles.childNodes;
+                    }
                     for(var i = 0; i < searchEles.length; i++) {
                         searchEles[i].style.margin = "0px";
                         searchEles[i].shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
