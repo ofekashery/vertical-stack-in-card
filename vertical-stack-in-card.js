@@ -44,16 +44,17 @@ class VerticalStackInCard extends HTMLElement {
     }
 
     set hass(hass) {
-        const config = this._config;
-        const root = this.shadowRoot;
-        let index = 0;
-        if (config.title) {
-            index++;
+        if (this._refCards) {
+            this._refCards.forEach((card) => {
+                card.hass = hass;
+            });
         }
-        config.cards.forEach(item => {
-            root.childNodes[index].hass = hass;
-            if (root.childNodes[index].shadowRoot) {
-                if (!root.childNodes[index].shadowRoot.querySelector('ha-card')) {
+    }
+
+    connectedCallback() {
+        this._refCards.forEach((element) => {
+            if (element.shadowRoot) {
+                if (!element.shadowRoot.querySelector('ha-card')) {
                     var searchEles = root.childNodes[index].shadowRoot.getElementById("root");
                     if (!searchEles) searchEles = root.childNodes[index].shadowRoot.getElementById("card") {
                         searchEles = searchEles.childNodes;
@@ -64,15 +65,12 @@ class VerticalStackInCard extends HTMLElement {
                         searchEles[i].shadowRoot.querySelector('ha-card').style.paddingBottom = '0px';
                     }
                 } else {
-                    root.childNodes[index].shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
-                    root.childNodes[index].shadowRoot.querySelector('ha-card').style.paddingBottom = '0px';
-                    if(index > 0 && !config.title) {
-                        root.childNodes[index].shadowRoot.querySelector('ha-card').style.paddingTop = '0px';
-                    }
+                    element.shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
+                    element.shadowRoot.querySelector('ha-card').style.paddingBottom = '0px';
+                    element.shadowRoot.querySelector('ha-card').style.paddingTop = '0px';
                 }
             }
-            index++;
-        })
+        });
     }
 
     getCardSize() {
@@ -83,4 +81,5 @@ class VerticalStackInCard extends HTMLElement {
         return totalSize;
     }
 }
+
 customElements.define('vertical-stack-in-card', VerticalStackInCard);
