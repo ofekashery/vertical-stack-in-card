@@ -59,7 +59,7 @@ class VerticalStackInCard extends HTMLElement {
                     if (!searchEles) searchEles = root.childNodes[index].shadowRoot.getElementById("card") {
                         searchEles = searchEles.childNodes;
                     }
-                    for(let i = 0; i < searchEles.length; i++) {
+                    for(var i = 0; i < searchEles.length; i++) {
                         searchEles[i].style.margin = "0px";
                         searchEles[i].shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
                         searchEles[i].shadowRoot.querySelector('ha-card').style.paddingBottom = '0px';
@@ -81,4 +81,5 @@ class VerticalStackInCard extends HTMLElement {
         return totalSize;
     }
 }
+
 customElements.define('vertical-stack-in-card', VerticalStackInCard);
