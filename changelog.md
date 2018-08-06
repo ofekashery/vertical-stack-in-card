@@ -1,3 +1,6 @@
+## 0.0.6
+- Closing issue [#16](https://github.com/custom-cards/vertical-stack-in-card/issues/16)
+
 ## 0.0.5
 - Closing issue [#13](https://github.com/custom-cards/vertical-stack-in-card/issues/13)
 - Fix the padding of the cards
