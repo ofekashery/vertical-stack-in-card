@@ -4,6 +4,7 @@ class VerticalStackInCard extends HTMLElement {
         // Make use of shadowRoot to avoid conflicts when reusing
         this.attachShadow({ mode: 'open' });
     }
+    
     setConfig(config) {
         if (!config || !config.cards || !Array.isArray(config.cards)) {
             throw new Error('Card config incorrect');
@@ -26,6 +27,7 @@ class VerticalStackInCard extends HTMLElement {
             title.innerHTML = '<div class="name">' + config.title + '</div>';
             root.appendChild(title);
         }
+
         let element;
         config.cards.forEach(item => {
             if (item.type.startsWith("custom:")){
@@ -49,20 +51,29 @@ class VerticalStackInCard extends HTMLElement {
 
     connectedCallback() {
         this._refCards.forEach((element) => {
-            if (element.shadowRoot) {
-                if (!element.shadowRoot.querySelector('ha-card')) {
-                    let searchEles = element.shadowRoot.getElementById("root");
-                    if (!searchEles) {
-                        searchEles = element.shadowRoot.getElementById("card");
+            let fn = () => {
+                if (element.shadowRoot) {
+                    if (!element.shadowRoot.querySelector('ha-card')) {
+                        let searchEles = element.shadowRoot.getElementById("root");
+                        if (!searchEles) {
+                            searchEles = element.shadowRoot.getElementById("card");
+                        }
+                        if(!searchEles) return;
+                        searchEles = searchEles.childNodes;
+                        for(let i = 0; i < searchEles.length; i++) {
+                            searchEles[i].style.margin = "0px";
+                            searchEles[i].shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
+                        }
+                    } else {
+                        element.shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
                     }
-                    searchEles = searchEles.childNodes;
-                    for(let i = 0; i < searchEles.length; i++) {
-                        searchEles[i].style.margin = "0px";
-                        searchEles[i].shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
-                    }
-                } else {
-                    element.shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
                 }
+            };
+
+            if(element.updateComplete) {
+                element.updateComplete.then(fn);
+            } else {
+                fn();
             }
         });
     }

@@ -1,3 +1,6 @@
+## 0.0.7
+- Fixes [#26](https://github.com/custom-cards/vertical-stack-in-card/issues/26)
+
 ## 0.0.6
 - Closing issue [#16](https://github.com/custom-cards/vertical-stack-in-card/issues/16)
 
