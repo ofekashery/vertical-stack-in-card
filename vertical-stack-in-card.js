@@ -49,12 +49,14 @@ class VerticalStackInCard extends HTMLElement {
 
     connectedCallback() {
         this._refCards.forEach((element) => {
+          let fn = () => {
             if (element.shadowRoot) {
                 if (!element.shadowRoot.querySelector('ha-card')) {
                     let searchEles = element.shadowRoot.getElementById("root");
                     if (!searchEles) {
                         searchEles = element.shadowRoot.getElementById("card");
                     }
+                    if(!searchEles) return;
                     searchEles = searchEles.childNodes;
                     for(let i = 0; i < searchEles.length; i++) {
                         searchEles[i].style.margin = "0px";
@@ -64,6 +66,12 @@ class VerticalStackInCard extends HTMLElement {
                     element.shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
                 }
             }
+          };
+          if(element.updateComplete) {
+            element.updateComplete.then(fn);
+          } else {
+            fn();
+          }
         });
     }
 
