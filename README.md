@@ -23,11 +23,11 @@ wget https://raw.githubusercontent.com/custom-cards/vertical-stack-in-card/maste
 mv vertical-stack-in-card.js /config/www/
 ```
 
-2. Link `vertical-stack-in-card` inside you `ui-lovelace.yaml` 
+2. Link `vertical-stack-in-card` inside your `ui-lovelace.yaml` 
 
 ```yaml
 resources:
-  - url: /local/vertical-stack-in-card.js?v=0.0.7
+  - url: /local/vertical-stack-in-card.js?v=0.0.8
     type: js
 ```
 
