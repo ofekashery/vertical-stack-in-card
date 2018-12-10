@@ -1,3 +1,6 @@
+## 0.0.9
+- Closing issue [#34](https://github.com/custom-cards/vertical-stack-in-card/issues/34)
+
 ## 0.0.8
 - Closing issue [#21](https://github.com/custom-cards/vertical-stack-in-card/issues/21), [#24](https://github.com/custom-cards/vertical-stack-in-card/issues/24)
 
