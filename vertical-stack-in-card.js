@@ -73,7 +73,9 @@ class VerticalStackInCard extends HTMLElement {
                 if (!searchEles) return;
                 searchEles = searchEles.childNodes;
                 for (let i = 0; i < searchEles.length; i++) {
-                    searchEles[i].style.margin = "0px";
+                    if(searchEles[i].style !== undefined){
+                        searchEles[i].style.margin = "0px";
+                    }
                     this._card(searchEles[i]);
                 }
             } else {
