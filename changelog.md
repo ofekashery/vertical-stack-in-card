@@ -1,3 +1,6 @@
+## 0.1.0
+- Fixes problems with some embedded cards that result in storm of errors in console and non-removed frames.
+
 ## 0.0.9
 - Closing issue [#34](https://github.com/custom-cards/vertical-stack-in-card/issues/34)
 
