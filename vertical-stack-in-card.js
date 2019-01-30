@@ -15,7 +15,7 @@ class VerticalStackInCard extends HTMLElement {
         this.style.background = "var(--paper-card-background-color)";
 
         const root = this.shadowRoot;
-        while (root.lastChild) {
+        while (root.hasChildNodes()) {
             root.removeChild(root.lastChild);
         }
 
@@ -27,21 +27,54 @@ class VerticalStackInCard extends HTMLElement {
             title.innerHTML = '<div class="name">' + config.title + '</div>';
             root.appendChild(title);
         }
-
-        let element;
-        config.cards.forEach(item => {
-            if (item.type.startsWith("custom:")){
-                element = document.createElement(`${item.type.substr("custom:".length)}`);
-            } else {
-                element = document.createElement(`hui-${item.type}-card`);
+        
+        let ok = true;
+        config.cards.forEach((tag) => {
+            if(!ok) return;
+            
+            if(tag.type.startsWith("custom:")){
+                let type = tag.type.substr(7);
+                if(!customElements.get(type)) {
+                    ok = false;
+                    customElements.whenDefined(type).then(() => {
+                        this.setConfig(config);
+                    });
+                    let element = document.createElement("hui-error-card");
+                    element.setConfig({
+                        type: "error",
+                        error: `Still waiting for ${type} to load`,
+                        config: config,
+                    });
+                    root.appendChild(element);
+                    this._refCards.push(element);
+                }
             }
-            element.setConfig(item);
-            root.appendChild(element);
-            this._refCards.push(element);
         });
+        if(ok){
+            config.cards.forEach((item) => {
+                let element;
+                if (item.type.startsWith("custom:")){
+                    element = document.createElement(`${item.type.substr(7)}`);
+                } else {
+                    element = document.createElement(`hui-${item.type}-card`);
+                }
+                element.setConfig(item);
+                root.appendChild(element);
+                this._refCards.push(element);
+            });
+        }
+            
+        if(this._hass){ 
+            if (this._refCards) {
+                this._refCards.forEach((card) => {
+                    card.hass = this._hass;
+                });
+            }
+        }
     }
 
     set hass(hass) {
+        this._hass = hass;//cache status updates
         if (this._refCards) {
             this._refCards.forEach((card) => {
                 card.hass = hass;
