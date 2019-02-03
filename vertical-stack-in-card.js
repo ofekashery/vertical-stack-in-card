@@ -54,7 +54,7 @@ class VerticalStackInCard extends HTMLElement {
                 composed: true,
             });
             ev.detail = detail || {};
-            
+
             if (entity) {
                 entity.dispatchEvent(ev);
             } else {
@@ -72,13 +72,15 @@ class VerticalStackInCard extends HTMLElement {
 
         config.cards.forEach((item) => {
             let tag = item.type;
-            
-            if (tag.startsWith("custom:")) {
+
+            if (tag.startsWith("divider")) {
+                tag = `hui-divider-row`;
+            } else if (tag.startsWith("custom:")) {
                 tag = tag.substr("custom:".length);
             } else {
                 tag = `hui-${tag}-card`;
             }
-    
+
             if (customElements.get(tag)) {
                 const element = _createThing(tag, item);
                 root.appendChild(element);
@@ -90,17 +92,17 @@ class VerticalStackInCard extends HTMLElement {
                     item
                 );
                 element.style.display = "None";
-    
+
                 const time = setTimeout(() => {
                     element.style.display = "";
                 }, 2000);
-    
+
                 // Remove error if element is defined later
                 customElements.whenDefined(tag).then(() => {
                     clearTimeout(time);
                     _fireEvent("ll-rebuild", {}, element);
                 });
-    
+
                 root.appendChild(element);
                 this._refCards.push(element);
             }
