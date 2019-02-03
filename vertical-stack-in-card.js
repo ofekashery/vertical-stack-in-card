@@ -99,7 +99,7 @@ class VerticalStackInCard extends HTMLElement {
                 
                 // Remove error if element is defined later
                 customElements.whenDefined(tag).then(() => {
-                    clearTimeout(timer);
+                    clearTimeout(time);
                     _fireEvent("ll-rebuild", {}, element);
                 });
                 
