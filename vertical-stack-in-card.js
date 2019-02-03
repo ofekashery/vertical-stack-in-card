@@ -28,53 +28,88 @@ class VerticalStackInCard extends HTMLElement {
             root.appendChild(title);
         }
         
-        let ok = true;
-        config.cards.forEach((tag) => {
-            if(!ok) return;
-            
-            if(tag.type.startsWith("custom:")){
-                let type = tag.type.substr(7);
-                if(!customElements.get(type)) {
-                    ok = false;
-                    customElements.whenDefined(type).then(() => {
-                        this.setConfig(config);
-                    });
-                    let element = document.createElement("hui-error-card");
-                    element.setConfig({
-                        type: "error",
-                        error: `Still waiting for ${type} to load`,
-                        config: config,
-                    });
-                    root.appendChild(element);
-                    this._refCards.push(element);
-                }
+        const _createThing = (tag, config) => {
+            const element = document.createElement(tag);
+            try {
+                element.setConfig(config);
+            } catch (err) {
+                console.error(tag, err);
+                return _createError(err.message, config);
             }
-        });
-        if(ok){
-            config.cards.forEach((item) => {
-                let element;
-                if (item.type.startsWith("custom:")){
-                    element = document.createElement(`${item.type.substr(7)}`);
-                } else {
-                    element = document.createElement(`hui-${item.type}-card`);
-                }
-                element.setConfig(item);
+            return element;
+        };
+
+        const _createError = (error, config) => {
+            return _createThing("hui-error-card", {
+                type: "error",
+                error,
+                config,
+            });
+        };
+        
+        const _fireEvent = (ev, detail, entity=null) => {
+            ev = new Event(ev, {
+                bubbles: true,
+                cancelable: false,
+                composed: true,
+            });
+            ev.detail = detail || {};
+            if(entity) {
+                entity.dispatchEvent(ev);
+            } else {
+            document
+                .querySelector("home-assistant")
+                .shadowRoot.querySelector("home-assistant-main")
+                .shadowRoot.querySelector("app-drawer-layout partial-panel-resolver")
+                .shadowRoot.querySelector("ha-panel-lovelace")
+                .shadowRoot.querySelector("hui-root")
+                .shadowRoot.querySelector("ha-app-layout #view")
+                .firstElementChild
+                .dispatchEvent(ev);
+            }
+        }
+        
+        config.cards.forEach((item) => {
+            
+            let tag = item.type;
+            if(tag.startsWith( "custom:" )) {
+                tag = tag.substr( "custom:".length );
+            } 
+            else {
+                tag = `hui-${tag}-card`;
+            }
+
+            if(customElements.get(tag)){
+                const element = _createThing(tag, item);
+                
                 root.appendChild(element);
                 this._refCards.push(element);
-            });
-        }
-            
-        if(this._hass){ 
-            if (this._refCards) {
-                this._refCards.forEach((card) => {
-                    card.hass = this._hass;
-                });
             }
-        }
+            else{
+                // If element doesn't exist (yet) create an error
+                const element = _createError(
+                    `Custom element doesn't exist: ${tag}.`,
+                    item
+                );
+                element.style.display = "None";
+                
+                const time = setTimeout(() => {
+                    element.style.display = "";
+                }, 2000);
+                
+                // Remove error if element is defined later
+                customElements.whenDefined(tag).then(() => {
+                    clearTimeout(timer);
+                    _fireEvent("ll-rebuild", {}, element);
+                });
+                
+                root.appendChild(element);
+                this._refCards.push(element);
+            }
+        });
     }
 
     set hass(hass) {
-        this._hass = hass;//cache status updates
         if (this._refCards) {
             this._refCards.forEach((card) => {
                 card.hass = hass;
