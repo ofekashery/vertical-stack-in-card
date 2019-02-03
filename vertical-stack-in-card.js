@@ -27,7 +27,7 @@ class VerticalStackInCard extends HTMLElement {
             title.innerHTML = '<div class="name">' + config.title + '</div>';
             root.appendChild(title);
         }
-        
+
         const _createThing = (tag, config) => {
             const element = document.createElement(tag);
             try {
@@ -46,7 +46,7 @@ class VerticalStackInCard extends HTMLElement {
                 config,
             });
         };
-        
+
         const _fireEvent = (ev, detail, entity=null) => {
             ev = new Event(ev, {
                 bubbles: true,
@@ -54,55 +54,53 @@ class VerticalStackInCard extends HTMLElement {
                 composed: true,
             });
             ev.detail = detail || {};
-            if(entity) {
+            
+            if (entity) {
                 entity.dispatchEvent(ev);
             } else {
-            document
-                .querySelector("home-assistant")
-                .shadowRoot.querySelector("home-assistant-main")
-                .shadowRoot.querySelector("app-drawer-layout partial-panel-resolver")
-                .shadowRoot.querySelector("ha-panel-lovelace")
-                .shadowRoot.querySelector("hui-root")
-                .shadowRoot.querySelector("ha-app-layout #view")
-                .firstElementChild
-                .dispatchEvent(ev);
+                document
+                    .querySelector("home-assistant")
+                    .shadowRoot.querySelector("home-assistant-main")
+                    .shadowRoot.querySelector("app-drawer-layout partial-panel-resolver")
+                    .shadowRoot.querySelector("ha-panel-lovelace")
+                    .shadowRoot.querySelector("hui-root")
+                    .shadowRoot.querySelector("ha-app-layout #view")
+                    .firstElementChild
+                    .dispatchEvent(ev);
             }
         }
-        
+
         config.cards.forEach((item) => {
-            
             let tag = item.type;
-            if(tag.startsWith( "custom:" )) {
-                tag = tag.substr( "custom:".length );
-            } 
-            else {
+            
+            if (tag.startsWith("custom:")) {
+                tag = tag.substr("custom:".length);
+            } else {
                 tag = `hui-${tag}-card`;
             }
-
-            if(customElements.get(tag)){
+    
+            if (customElements.get(tag)) {
                 const element = _createThing(tag, item);
-                
                 root.appendChild(element);
                 this._refCards.push(element);
-            }
-            else{
+            } else {
                 // If element doesn't exist (yet) create an error
                 const element = _createError(
                     `Custom element doesn't exist: ${tag}.`,
                     item
                 );
                 element.style.display = "None";
-                
+    
                 const time = setTimeout(() => {
                     element.style.display = "";
                 }, 2000);
-                
+    
                 // Remove error if element is defined later
                 customElements.whenDefined(tag).then(() => {
                     clearTimeout(time);
                     _fireEvent("ll-rebuild", {}, element);
                 });
-                
+    
                 root.appendChild(element);
                 this._refCards.push(element);
             }
