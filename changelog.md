@@ -1,3 +1,7 @@
+## 0.1.1
+- Fix creating custom cards (@Nikfinn99 @thomasloven).
+- Support dividers.
+
 ## 0.1.0
 - Fixes problems with some embedded cards that result in storm of errors in console and non-removed frames.
 
