@@ -1,4 +1,4 @@
-## 0.0.2
+## 0.1.2
 - Support themes, close [#53](https://github.com/custom-cards/vertical-stack-in-card/issues/53)
 
 ## 0.1.1
