@@ -131,7 +131,12 @@ class VerticalStackInCard extends HTMLElement {
         });
     }
 
-    _card(element) {
+    _card(element, recursive) {
+        if (element.updateComplete && !recursive) {
+            element.updateComplete.then(() => {
+                this._card(element, true);
+            })
+        }
         if (element.shadowRoot) {
             if (!element.shadowRoot.querySelector('ha-card')) {
                 let searchEles = element.shadowRoot.getElementById("root");
