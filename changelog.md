@@ -1,5 +1,5 @@
 ## 0.1.2
-- Support themes, close [#53](https://github.com/custom-cards/vertical-stack-in-card/issues/53)
+- Fix some styling issues
 
 ## 0.1.1
 - Fix creating custom cards (@Nikfinn99 @thomasloven).
