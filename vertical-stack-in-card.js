@@ -148,11 +148,15 @@ class VerticalStackInCard extends HTMLElement {
                     this._card(searchEles[i]);
                 }
             } else {
-                element.shadowRoot.querySelector('ha-card').style.boxShadow = 'none';
+                let ele = element.shadowRoot.querySelector('ha-card')
+                ele.style.boxShadow = 'none';
+                ele.style.background = 'transparent';
             }
         } else {
             if (typeof element.querySelector === 'function' && element.querySelector('ha-card')) {
-                element.querySelector('ha-card').style.boxShadow = 'none';
+                let ele = element.querySelector('ha-card')
+                ele.style.boxShadow = 'none';
+                ele.style.background = 'transparent';
             }
             let searchEles = element.childNodes;
             for (let i = 0; i < searchEles.length; i++) {
