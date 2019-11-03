@@ -14,6 +14,7 @@ class VerticalStackInCard extends HTMLElement {
         this.style.borderRadius = "var(--ha-card-border-radius, 2px)";
         this.style.background = "var(--paper-card-background-color)";
         this.style.display = "block";
+        this.style.overflow = "hidden";
 
         const root = this.shadowRoot;
         while (root.hasChildNodes()) {
@@ -151,12 +152,14 @@ class VerticalStackInCard extends HTMLElement {
                 let ele = element.shadowRoot.querySelector('ha-card')
                 ele.style.boxShadow = 'none';
                 ele.style.background = 'transparent';
+                ele.style.borderRadius = '0';
             }
         } else {
             if (typeof element.querySelector === 'function' && element.querySelector('ha-card')) {
                 let ele = element.querySelector('ha-card')
                 ele.style.boxShadow = 'none';
                 ele.style.background = 'transparent';
+                ele.style.borderRadius = '0';
             }
             let searchEles = element.childNodes;
             for (let i = 0; i < searchEles.length; i++) {
