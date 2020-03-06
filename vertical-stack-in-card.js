@@ -144,14 +144,12 @@ class VerticalStackInCard extends HTMLElement {
             } else {
                 let ele = element.shadowRoot.querySelector('ha-card')
                 ele.style.boxShadow = 'none';
-                ele.style.background = 'transparent';
                 ele.style.borderRadius = '0';
             }
         } else {
             if (typeof element.querySelector === 'function' && element.querySelector('ha-card')) {
                 let ele = element.querySelector('ha-card')
                 ele.style.boxShadow = 'none';
-                ele.style.background = 'transparent';
                 ele.style.borderRadius = '0';
             }
             let searchEles = element.childNodes;
