@@ -1,3 +1,6 @@
+## 0.3.0
+- Fix [#75](https://github.com/ofekashery/vertical-stack-in-card/issues/75), [#78](https://github.com/ofekashery/vertical-stack-in-card/issues/78).
+
 ## 0.2.1
 - Fix [#57](https://github.com/custom-cards/vertical-stack-in-card/issues/57), [#59](https://github.com/custom-cards/vertical-stack-in-card/issues/59), [#66](https://github.com/custom-cards/vertical-stack-in-card/issues/66), [#67](https://github.com/custom-cards/vertical-stack-in-card/issues/67), [#68](https://github.com/custom-cards/vertical-stack-in-card/issues/68).
 

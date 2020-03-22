@@ -19,7 +19,7 @@ Vertical Stack In Card allows you to group multiple cards in one card.
 
 Bash:
 ```bash
-wget https://raw.githubusercontent.com/custom-cards/vertical-stack-in-card/master/vertical-stack-in-card.js
+wget https://raw.githubusercontent.com/ofekashery/vertical-stack-in-card/master/vertical-stack-in-card.js
 mv vertical-stack-in-card.js /config/www/
 ```
 
@@ -27,7 +27,7 @@ mv vertical-stack-in-card.js /config/www/
 
 ```yaml
 resources:
-  - url: /local/vertical-stack-in-card.js?v=0.1.3
+  - url: /local/vertical-stack-in-card.js?v=0.3.0
     type: js
 ```
 
