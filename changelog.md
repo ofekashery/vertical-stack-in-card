@@ -1,3 +1,6 @@
+## 0.3.1
+- Add horizontal version
+
 ## 0.3.0
 - Fix [#75](https://github.com/ofekashery/vertical-stack-in-card/issues/75), [#78](https://github.com/ofekashery/vertical-stack-in-card/issues/78).
 

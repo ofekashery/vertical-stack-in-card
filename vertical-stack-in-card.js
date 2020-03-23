@@ -34,6 +34,13 @@ class VerticalStackInCard extends HTMLElement {
             const cardContent = document.createElement('div');
             card.header = config.title;
             cards.forEach(card => cardContent.appendChild(card));
+            if (config.horizontal) {
+                cardContent.style.display = 'flex';
+                cardContent.childNodes.forEach(card => {
+                    card.style.flex = '1 1 0';
+                    card.style.minWidth = 0;
+                });
+            }
             card.appendChild(cardContent);
             
             while (this.hasChildNodes()) {

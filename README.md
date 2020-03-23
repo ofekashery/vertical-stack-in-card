@@ -12,6 +12,7 @@ Vertical Stack In Card allows you to group multiple cards in one card.
 | type | string | **Required** | `custom:vertical-stack-in-card`
 | cards | list | **Required** | List of cards
 | title | string | **Optional** | Card title
+| horizontal | boolean | **Optional** | Default: ``false``
 
 ## Installation
 
@@ -27,7 +28,7 @@ mv vertical-stack-in-card.js /config/www/
 
 ```yaml
 resources:
-  - url: /local/vertical-stack-in-card.js?v=0.3.0
+  - url: /local/vertical-stack-in-card.js?v=0.3.1
     type: js
 ```
 
