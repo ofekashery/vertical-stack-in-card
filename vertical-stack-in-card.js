@@ -1,3 +1,6 @@
+const vsinVersion = '0.3.2';
+console.log(`%cvertical-stack-in-card\n%cVersion: ${vsinVersion}`, 'color: #1976d2; font-weight: bold;', '');
+
 class VerticalStackInCard extends HTMLElement {
     constructor() {
         super();
@@ -116,7 +119,7 @@ class VerticalStackInCard extends HTMLElement {
             if (element.shadowRoot.querySelector('ha-card')) {
                 let ele = element.shadowRoot.querySelector('ha-card')
                 ele.style.boxShadow = 'none';
-                ele.style.borderRadius = '0';
+                // ele.style.borderRadius = '0';
             } else {
                 let searchEles = element.shadowRoot.getElementById('root');
                 if (!searchEles) {
@@ -135,7 +138,7 @@ class VerticalStackInCard extends HTMLElement {
             if (typeof element.querySelector === 'function' && element.querySelector('ha-card')) {
                 let ele = element.querySelector('ha-card')
                 ele.style.boxShadow = 'none';
-                ele.style.borderRadius = '0';
+                // ele.style.borderRadius = '0';
             }
             let searchEles = element.childNodes;
             for (let i = 0; i < searchEles.length; i++) {
