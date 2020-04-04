@@ -1,4 +1,10 @@
 # Vertical Stack In Card
+![Version](https://img.shields.io/github/v/release/ofekashery/vertical-stack-in-card)
+![Downloads](https://img.shields.io/github/downloads/ofekashery/vertical-stack-in-card/total)
+![Version](https://img.shields.io/github/v/release/ofekashery/vertical-stack-in-card)
+![Stars](https://img.shields.io/github/stars/ofekashery/vertical-stack-in-card)
+![Discord](https://img.shields.io/discord/330944238910963714)
+
 Vertical Stack In Card allows you to group multiple cards in one card.
 
 #### Please ⭐️ this repo if you find it useful
@@ -28,7 +34,7 @@ mv vertical-stack-in-card.js /config/www/
 
 ```yaml
 resources:
-  - url: /local/vertical-stack-in-card.js?v=0.3.1
+  - url: /local/vertical-stack-in-card.js?v=0.3.2
     type: js
 ```
 
