@@ -9,7 +9,7 @@ Vertical Stack In Card allows you to group multiple cards in one card.
 
 #### Please ⭐️ this repo if you find it useful
 
-![example](https://user-images.githubusercontent.com/16443111/42928369-c7386c84-8b3f-11e8-8a5c-583ddac3f24d.png)
+![Example](https://user-images.githubusercontent.com/16443111/80155963-779f3800-85cb-11ea-9565-c360eb9dffb1.png)
 
 ## Options
 
