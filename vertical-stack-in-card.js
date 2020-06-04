@@ -152,11 +152,16 @@ class VerticalStackInCard extends HTMLElement {
   }
 
   getCardSize() {
-    let totalSize = 0;
-    this._refCards.forEach((element) => {
-      totalSize += typeof element.getCardSize === 'function' ? element.getCardSize() : 1;
+    let promise = new Promise((resolve, reject) => {
+      if (this._refCards.length == this._config.cards.length) {
+        let totalSize = 0;
+        this._refCards.forEach((element) => {
+          totalSize += typeof element.getCardSize === 'function' ? element.getCardSize() : 1;
+        });
+        resolve(totalSize);
+      }
     });
-    return totalSize;
+   return promise;
   }
 }
 
