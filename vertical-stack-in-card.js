@@ -153,13 +153,11 @@ class VerticalStackInCard extends HTMLElement {
 
   getCardSize() {
     let promise = new Promise((resolve, reject) => {
-      if (this._refCards.length == this._config.cards.length) {
-        let totalSize = 0;
-        this._refCards.forEach((element) => {
-          totalSize += typeof element.getCardSize === 'function' ? element.getCardSize() : 1;
-        });
-        resolve(totalSize);
-      }
+      let totalSize = 0;
+      this._refCards.forEach((element) => {
+        totalSize += typeof element.getCardSize === 'function' ? element.getCardSize() : 1;
+      });
+      resolve(totalSize);
     });
    return promise;
   }
