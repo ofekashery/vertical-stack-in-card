@@ -43,20 +43,20 @@ resources:
 **Example**
 
 ```yaml
-- type: custom:vertical-stack-in-card
-  title: My Card
-  cards:
-    - type: glance
-      entities:
-        - sensor.temperature_sensor
-        - sensor.humidity_sensor
-        - sensor.motion_sensor
-    - type: entities
-      entities:
-       - switch.livingroom_tv
-       - entity: script.livingroom_receiver
-         name: Receiver
-       - switch.livingroom_ac
+type: 'custom:vertical-stack-in-card'
+title: My Card
+cards:
+  - type: glance
+    entities:
+      - sensor.temperature_sensor
+      - sensor.humidity_sensor
+      - sensor.motion_sensor
+  - type: entities
+    entities:
+     - switch.livingroom_tv
+     - entity: script.livingroom_receiver
+       name: Receiver
+     - switch.livingroom_ac
 ```
 
 ## Credits
