@@ -34,7 +34,7 @@ mv vertical-stack-in-card.js /config/www/
 
 ```yaml
 resources:
-  - url: /local/vertical-stack-in-card.js?v=0.3.2
+  - url: /local/vertical-stack-in-card.js?v=0.4.0
     type: js
 ```
 
