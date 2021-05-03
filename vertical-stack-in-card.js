@@ -1,4 +1,4 @@
-console.log(`%cvertical-stack-in-card\n%cVersion: ${'0.4.0'}`, 'color: #1976d2; font-weight: bold;', '');
+console.log(`%cvertical-stack-in-card\n%cVersion: ${'0.4.1'}`, 'color: #1976d2; font-weight: bold;', '');
 
 class VerticalStackInCard extends HTMLElement {
   constructor() {
@@ -126,7 +126,7 @@ class VerticalStackInCard extends HTMLElement {
         ele.style.boxShadow = 'none';
         ele.style.borderRadius = '0';
         if ('styles' in config) {
-          Object.entries(config.styles).forEach(([key, value]) => ele.style.setProperty(key, value))
+          Object.entries(config.styles).forEach(([key, value]) => ele.style.setProperty(key, value));
         }
       } else {
         let searchEles = element.shadowRoot.getElementById('root');
@@ -148,7 +148,7 @@ class VerticalStackInCard extends HTMLElement {
         ele.style.boxShadow = 'none';
         ele.style.borderRadius = '0';
         if ('styles' in config) {
-          Object.entries(config.styles).forEach(([key, value]) => ele.style.setProperty(key, value))
+          Object.entries(config.styles).forEach(([key, value]) => ele.style.setProperty(key, value));
         }
       }
       let searchEles = element.childNodes;
