@@ -176,7 +176,7 @@ class VerticalStackInCard extends HTMLElement {
   async getCardSize() {
     await this._cardSize.promise;
     const sizes = await Promise.all(this._refCards.map(this._computeCardSize));
-    return sizes.reduce((a, b) => a + b);
+    return sizes.reduce((a, b) => a + b, 0);
   }
 }
 
