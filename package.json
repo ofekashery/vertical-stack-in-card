@@ -1,0 +1,64 @@
+{
+  "name": "vertical-stack-in-card",
+  "version": "0.5.0",
+  "description": "Vertical Stack In Card allows you to group multiple cards in one card.",
+  "main": "src/vertical-stack-in-card.ts",
+  "repository": "git@github.com:ofekashery/vertical-stack-in-card.git",
+  "author": "Ofek Ashery <ofek.ashery@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/ofekashery/vertical-stack-in-card#readme",
+  "bugs": {
+    "url": "https://github.com/ofekashery/vertical-stack-in-card/issues"
+  },
+  "keywords": [
+    "home-assistant",
+    "homeassistant",
+    "hass",
+    "automation",
+    "lovelace",
+    "custom-cards"
+  ],
+  "scripts": {
+    "build": "npm run build:types-check && npm run lint && npm run rollup",
+    "build:types-check": "ts-interface-builder src/types-config.ts",
+    "rollup": "rollup -c",
+    "lint": "eslint src/*.ts",
+    "watch": "npm run build:types-check && rollup -c --watch",
+    "postversion": "npm run build"
+  },
+  "dependencies": {
+    "@lit-labs/scoped-registry-mixin": "^1.0.0",
+    "home-assistant-js-websocket": "^7.0.3",
+    "custom-card-helpers": "^1.9.0",
+    "lit": "^2.2.2",
+    "superstruct": "^0.15.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-commonjs": "^21.0.3",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^9.0.1",
+    "@semantic-release/release-notes-generator": "^10.0.3",
+    "@types/lz-string": "^1.3.34",
+    "@types/moment-duration-format": "^2.2.3",
+    "@types/spark-md5": "^3.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.18.0",
+    "@typescript-eslint/parser": "^5.18.0",
+    "conventional-changelog-conventionalcommits": "^4.6.3",
+    "eslint": "^8.13.0",
+    "rollup-plugin-serve": "^1.1.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "semantic-release": "^19.0.2",
+    "ts-interface-builder": "^0.3.3",
+    "typescript": "^4.6.3"
+  }
+}
