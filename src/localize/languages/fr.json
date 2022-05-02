@@ -3,6 +3,7 @@
     "invalid_configuration": "Configuration invalide, veuillez vérifier la documentation"
   },
   "editor": {
-    "horizontal": "Affichage horizontal"
+    "horizontal": "Affichage horizontal",
+    "styles": "Styles"
   }
 }

@@ -72,6 +72,13 @@ export class VerticalStackInCardEditor extends LitElement implements LovelaceCar
           .computeLabel=${this._computeLabelCallback}
           @value-changed=${this._valueChanged}
         ></ha-form>
+        <ha-yaml-editor
+          .hass=${this.hass}
+          .label=${localize('editor.styles')}
+          .defaultValue=${this._config.styles || ''}
+          @value-changed=${this._stylesChanged}
+        >
+        </ha-yaml-editor>
         <div class="toolbar">
           <paper-tabs .selected=${selected} scrollable @iron-activate=${this._handleSelectedCard}>
             ${this._config.cards.map((_card, i) => html` <paper-tab> ${i + 1} </paper-tab> `)}
@@ -226,6 +233,15 @@ export class VerticalStackInCardEditor extends LitElement implements LovelaceCar
 
   private _valueChanged(ev: CustomEvent): void {
     fireEvent(this, 'config-changed', { config: ev.detail.value });
+  }
+
+  private _stylesChanged(ev: CustomEvent): void {
+    fireEvent(this, 'config-changed', {
+      config: {
+        ...this._config,
+        styles: ev.detail.value,
+      },
+    });
   }
 
   private async _loadCardHelpers(): Promise<void> {
