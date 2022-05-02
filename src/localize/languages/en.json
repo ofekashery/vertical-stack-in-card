@@ -1,0 +1,8 @@
+{
+  "common": {
+    "invalid_configuration": "Invalid configuration please check the documentation"
+  },
+  "editor": {
+    "horizontal": "Horizontal display"
+  }
+}

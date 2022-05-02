@@ -10,6 +10,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { CARD_EDITOR_NAME, CARD_NAME } from './const';
 import { VerticalStackInCardConfig } from './vertical-stack-in-card-config';
 import { classMap } from 'lit/directives/class-map.js';
+import { localize } from './localize/localize';
 
 /* eslint no-console: 0 */
 console.log(`%cvertical-stack-in-card\n%cVersion: ${'0.4.2'}`, 'color: #1976d2; font-weight: bold;', '');
@@ -52,10 +53,11 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
 
   async setConfig(config: VerticalStackInCardConfig): Promise<void> {
     if (!config || !config.cards || !Array.isArray(config.cards)) {
-      throw new Error('Invalid configuration');
+      throw new Error(localize('common.invalid_configuration'));
     }
 
     this._config = {
+      horizontal: false,
       ...config,
     };
 
@@ -153,7 +155,8 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
       <div
         class=${classMap({
           container: true,
-          vertical: true,
+          vertical: this._config.horizontal == false,
+          horizontal: this._config.horizontal == true,
         })}
       >
         ${this._cards}

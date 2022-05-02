@@ -8,9 +8,17 @@ import {
 } from 'custom-card-helpers';
 import { css, CSSResultGroup, html, LitElement, TemplateResult } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
+import memoizeOne from 'memoize-one';
 import { CARD_EDITOR_NAME } from './const';
-import { ConfigChangedEvent, GUIModeChangedEvent } from './utils';
 import { VerticalStackInCardConfig } from './vertical-stack-in-card-config';
+import { ConfigChangedEvent, GUIModeChangedEvent } from './ha/events/utils';
+import { HaFormSchema } from './ha/forms/utils';
+import { localize } from './localize/localize';
+
+const computeSchema = memoizeOne((): HaFormSchema[] => [
+  { name: 'title', selector: { text: {} } },
+  { name: 'horizontal', selector: { boolean: {} } },
+]);
 
 @customElement(CARD_EDITOR_NAME)
 export class VerticalStackInCardEditor extends LitElement implements LovelaceCardEditor {
@@ -47,15 +55,23 @@ export class VerticalStackInCardEditor extends LitElement implements LovelaceCar
   }
 
   protected render(): TemplateResult {
-    if (!this.hass || !this._config) {
+    if (!this.hass || !this._config || !this._config.cards) {
       return html``;
     }
 
     const selected = this._selectedCard!;
-    const numcards = this._config.cards.length;
+    const numcards = this._config.cards?.length ?? 0;
+    const schema = computeSchema();
 
     return html`
       <div class="card-config">
+        <ha-form
+          .hass=${this.hass}
+          .data=${this._config}
+          .schema=${schema}
+          .computeLabel=${this._computeLabelCallback}
+          @value-changed=${this._valueChanged}
+        ></ha-form>
         <div class="toolbar">
           <paper-tabs .selected=${selected} scrollable @iron-activate=${this._handleSelectedCard}>
             ${this._config.cards.map((_card, i) => html` <paper-tab> ${i + 1} </paper-tab> `)}
@@ -121,6 +137,13 @@ export class VerticalStackInCardEditor extends LitElement implements LovelaceCar
       </div>
     `;
   }
+
+  private _computeLabelCallback = (schema: HaFormSchema) => {
+    if (schema.name === 'horizontal') {
+      return localize('editor.horizontal');
+    }
+    return this.hass!.localize(`ui.panel.lovelace.editor.card.generic.${schema.name}`);
+  };
 
   protected _handleSelectedCard(ev) {
     if (ev.target.id === 'add-card') {
