@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   fireEvent,
   HASSDomEvent,
@@ -59,7 +60,7 @@ export class VerticalStackInCardEditor extends LitElement implements LovelaceCar
       return html``;
     }
 
-    const selected = this._selectedCard!;
+    const selected = this._selectedCard;
     const numcards = this._config.cards?.length ?? 0;
     const schema = computeSchema();
 
@@ -98,7 +99,7 @@ export class VerticalStackInCardEditor extends LitElement implements LovelaceCar
             ? html`
                 <div id="card-options">
                   <mwc-button @click=${this._toggleMode} .disabled=${!this._guiModeAvailable} class="gui-mode-button">
-                    ${this.hass!.localize(
+                    ${this.hass.localize(
                       !this._cardEditorEl || this._GUImode
                         ? 'ui.panel.lovelace.editor.edit_card.show_code_editor'
                         : 'ui.panel.lovelace.editor.edit_card.show_visual_editor',
@@ -106,21 +107,21 @@ export class VerticalStackInCardEditor extends LitElement implements LovelaceCar
                   </mwc-button>
                   <ha-icon-button
                     .disabled=${selected === 0}
-                    .label=${this.hass!.localize('ui.panel.lovelace.editor.edit_card.move_before')}
+                    .label=${this.hass.localize('ui.panel.lovelace.editor.edit_card.move_before')}
                     @click=${this._handleMove}
                     .move=${-1}
                   >
                     <ha-icon icon="mdi:arrow-left"></ha-icon
                   ></ha-icon-button>
                   <ha-icon-button
-                    .label=${this.hass!.localize('ui.panel.lovelace.editor.edit_card.move_after')}
+                    .label=${this.hass.localize('ui.panel.lovelace.editor.edit_card.move_after')}
                     .disabled=${selected === numcards - 1}
                     @click=${this._handleMove}
                     .move=${1}
                     ><ha-icon icon="mdi:arrow-right"></ha-icon
                   ></ha-icon-button>
                   <ha-icon-button
-                    .label=${this.hass!.localize('ui.panel.lovelace.editor.edit_card.delete')}
+                    .label=${this.hass.localize('ui.panel.lovelace.editor.edit_card.delete')}
                     @click=${this._handleDeleteCard}
                     ><ha-icon icon="mdi:delete"></ha-icon
                   ></ha-icon-button>
@@ -149,12 +150,12 @@ export class VerticalStackInCardEditor extends LitElement implements LovelaceCar
     if (schema.name === 'horizontal') {
       return localize('editor.horizontal');
     }
-    return this.hass!.localize(`ui.panel.lovelace.editor.card.generic.${schema.name}`);
+    return this.hass?.localize(`ui.panel.lovelace.editor.card.generic.${schema.name}`);
   };
 
   protected _handleSelectedCard(ev) {
     if (ev.target.id === 'add-card') {
-      this._selectedCard = this._config!.cards.length;
+      this._selectedCard = this._config?.cards.length || 0;
       return;
     }
     this._setMode(true);

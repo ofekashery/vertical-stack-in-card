@@ -51,13 +51,12 @@ const plugins = [
 export default [
   {
     input: 'src/vertical-stack-in-card.ts',
+    preserveEntrySignatures: false,
+    inlineDynamicImports: true,
     output: {
       dir: './dist',
       format: 'es',
       sourcemap: dev ? true : false,
-      globals: {
-        apexcharts: 'VerticalStackInCard',
-      },
     },
     plugins: [...plugins],
     watch: {
