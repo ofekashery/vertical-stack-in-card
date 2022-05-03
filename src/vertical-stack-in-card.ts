@@ -6,7 +6,7 @@ import {
   LovelaceCardConfig,
   LovelaceCardEditor,
 } from 'custom-card-helpers';
-import { css, CSSResultGroup, html, LitElement, TemplateResult } from 'lit';
+import { css, CSSResultGroup, html, LitElement, PropertyValueMap, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { CARD_EDITOR_NAME, CARD_NAME } from './const';
 import { VerticalStackInCardConfig } from './vertical-stack-in-card-config';
@@ -25,7 +25,7 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
   }
 
   public static getStubConfig(): Record<string, unknown> {
-    return {};
+    return { cards: [] };
   }
 
   @property({ attribute: false }) public hass!: HomeAssistant;
@@ -34,7 +34,7 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
 
   @state() private _config?: VerticalStackInCardConfig;
 
-  private _helper?: any;
+  private _helpers?: any;
 
   async getCardSize(): Promise<number> {
     if (!this._cards) {
@@ -62,9 +62,9 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
       ...config,
     };
 
-    this._helper = (window as any).loadCardHelpers ? await (window as any).loadCardHelpers() : undefined;
+    this._helpers = (window as any).loadCardHelpers ? await (window as any).loadCardHelpers() : undefined;
 
-    this._cards = await Promise.all(config.cards.map((config) => this._createCardElement(config)));
+    this._cards = config.cards.map((config) => this._createCardElement(config));
 
     // Style cards
     this._cards.forEach((card) => {
@@ -76,8 +76,8 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
     });
   }
 
-  private async _createCardElement(cardConfig: LovelaceCardConfig) {
-    const element = this._helper.createCardElement(cardConfig) as LovelaceCard;
+  private _createCardElement(cardConfig: LovelaceCardConfig) {
+    const element = this._helpers.createCardElement(cardConfig) as LovelaceCard;
     if (this.hass) {
       element.hass = this.hass;
     }

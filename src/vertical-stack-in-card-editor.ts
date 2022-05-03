@@ -42,7 +42,9 @@ export class VerticalStackInCardEditor extends LitElement implements LovelaceCar
   private _initialized = false;
 
   public setConfig(config: VerticalStackInCardConfig): void {
-    this._config = config;
+    this._config = {
+      ...config,
+    };
 
     this._loadCardHelpers();
   }
@@ -61,7 +63,7 @@ export class VerticalStackInCardEditor extends LitElement implements LovelaceCar
     }
 
     const selected = this._selectedCard;
-    const numcards = this._config.cards?.length ?? 0;
+    const numcards = this._config.cards.length;
     const schema = computeSchema();
 
     return html`

@@ -51,8 +51,8 @@ const plugins = [
 export default [
   {
     input: 'src/vertical-stack-in-card.ts',
-    preserveEntrySignatures: false,
-    inlineDynamicImports: true,
+    preserveEntrySignatures: 'strict',
+    // inlineDynamicImports: true,
     output: {
       dir: './dist',
       format: 'es',
