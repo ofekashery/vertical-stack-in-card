@@ -64,16 +64,28 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
 
     this._helpers = (window as any).loadCardHelpers ? await (window as any).loadCardHelpers() : undefined;
 
-    this._cards = config.cards.map((config) => this._createCardElement(config));
+    this._cards = await Promise.all(config.cards.map((config) => this._createCardElement(config)));
+  }
 
-    // Style cards
+  protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+    super.updated(_changedProperties);
+    if (!this._cards) return;
+
     this._cards.forEach((card) => {
-      if ((card as any).updateComplete) {
-        (card as any).updateComplete.then(() => this._cleanCardStyle(card));
-      } else {
-        this._cleanCardStyle(card);
-      }
+      this._waitForUpdate(card);
+      window.setTimeout(() => {
+        this._waitForUpdate(card);
+      }, 500);
     });
+  }
+
+  private _waitForUpdate(card: LovelaceCard): void {
+    if ((card as any).updateComplete) {
+      (card as any).updateComplete.then(() => this._cleanCardStyle(card));
+    } else {
+      this._cleanCardStyle(card);
+    }
+    this._cleanCardStyle(card);
   }
 
   private _createCardElement(cardConfig: LovelaceCardConfig) {
@@ -149,10 +161,7 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
       return html``;
     }
 
-    const title = this._config.title || '';
-
-    return html`<ha-card>
-      ${title ? html`<div class="card-header">${title}</div>` : null}
+    return html`<ha-card header=${this._config.title ?? null}>
       <div
         class=${classMap({
           container: true,
@@ -168,6 +177,10 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
   static get styles(): CSSResultGroup {
     return [
       css`
+        ha-card {
+          overflow: hidden;
+        }
+
         .container {
           display: flex;
           justify-content: flex-start;
