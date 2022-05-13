@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  computeCardSize,
   HomeAssistant,
   LovelaceCard,
   LovelaceCardConfig,
   LovelaceCardEditor,
+  createThing,
 } from 'custom-card-helpers';
-import { css, CSSResultGroup, html, LitElement, PropertyValueMap, PropertyValues, TemplateResult } from 'lit';
+import { css, CSSResultGroup, html, LitElement, PropertyValueMap, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { CARD_EDITOR_NAME, CARD_NAME } from './const';
 import { VerticalStackInCardConfig } from './vertical-stack-in-card-config';
-import { classMap } from 'lit/directives/class-map.js';
 import { localize } from './localize/localize';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const HELPERS = (window as any).loadCardHelpers ? (window as any).loadCardHelpers() : undefined;
 
 /* eslint no-console: 0 */
 console.log(`%cvertical-stack-in-card\n%cVersion: ${'0.4.2'}`, 'color: #1976d2; font-weight: bold;', '');
@@ -28,28 +30,36 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
     return { cards: [] };
   }
 
-  @property({ attribute: false }) public hass!: HomeAssistant;
-
-  @property() protected _cards?: LovelaceCard[];
+  @property() protected _card?: LovelaceCard;
 
   @state() private _config?: VerticalStackInCardConfig;
+
+  private _hass?: HomeAssistant;
+
+  set hass(hass: HomeAssistant) {
+    this._hass = hass;
+    if (this._card) {
+      this._card.hass = hass;
+    }
+  }
 
   private _helpers?: any;
 
   async getCardSize(): Promise<number> {
-    if (!this._cards) {
+    if (!this._card) {
       return 0;
     }
+    return await this._computeCardSize(this._card);
+  }
 
-    const promises: Array<Promise<number> | number> = [];
-
-    for (const element of this._cards) {
-      promises.push(computeCardSize(element));
+  private _computeCardSize(card: LovelaceCard): number | Promise<number> {
+    if (typeof card.getCardSize === 'function') {
+      return card.getCardSize();
     }
-
-    const results = await Promise.all(promises);
-
-    return results.reduce((partial_sum, a) => partial_sum + a, 0);
+    if (customElements.get(card.localName)) {
+      return 1;
+    }
+    return customElements.whenDefined(card.localName).then(() => this._computeCardSize(card));
   }
 
   async setConfig(config: VerticalStackInCardConfig): Promise<void> {
@@ -62,50 +72,61 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
       ...config,
     };
 
-    this._helpers = (window as any).loadCardHelpers ? await (window as any).loadCardHelpers() : undefined;
-
-    this._cards = await Promise.all(config.cards.map((config) => this._createCardElement(config)));
+    this._createStack()
   }
 
   protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
     super.updated(_changedProperties);
-    if (!this._cards) return;
+    if (!this._card) return;
+    this._waitForUpdate(this._card);
+    window.setTimeout(() => {
+      this._waitForUpdate(this._card);
+    }, 500);
+  }
 
-    this._cards.forEach((card) => {
-      this._waitForUpdate(card);
-      window.setTimeout(() => {
-        this._waitForUpdate(card);
-      }, 500);
+  private async _createStack() {
+    let _mode = 'vertical'
+    if (this._config!.horizontal == true) _mode = 'horizontal';
+    this._card = await this._createCardElement({
+      type: `${_mode}-stack`,
+      cards: this._config!.cards,
     });
   }
 
-  private _waitForUpdate(card: LovelaceCard): void {
-    if ((card as any).updateComplete) {
-      (card as any).updateComplete.then(() => this._cleanCardStyle(card));
+  private _waitForUpdate(card: LovelaceCard | undefined): void {
+    if (((card as unknown) as LitElement).updateComplete) {
+      (((card as unknown) as LitElement).updateComplete.then(() => this._cleanCardStyle(card)));
     } else {
       this._cleanCardStyle(card);
     }
     this._cleanCardStyle(card);
   }
 
-  private _createCardElement(cardConfig: LovelaceCardConfig) {
-    const element = this._helpers.createCardElement(cardConfig) as LovelaceCard;
-    if (this.hass) {
-      element.hass = this.hass;
+  private async _createCardElement(cardConfig: LovelaceCardConfig) {
+    let element: LovelaceCard;
+    if (HELPERS) {
+      element = (await HELPERS).createCardElement(cardConfig);
+    } else {
+      element = createThing(cardConfig);
     }
-
-    element.addEventListener(
-      'll-rebuild',
-      (ev) => {
-        ev.stopPropagation();
-        this._rebuildCard(element, cardConfig);
-      },
-      { once: true },
-    );
+    if (this._hass) {
+      element.hass = this._hass;
+    }
+    if (element) {
+      element.addEventListener(
+        'll-rebuild',
+        (ev) => {
+          ev.stopPropagation();
+          this._rebuildCard(element, cardConfig);
+        },
+        { once: true },
+      );
+    }
     return element;
   }
 
-  private _cleanCardStyle(element: LovelaceCard) {
+  private _cleanCardStyle(element: LovelaceCard | undefined) {
+    if (!element) return;
     const config = this._config;
     if (element.shadowRoot) {
       if (element.shadowRoot.querySelector('ha-card')) {
@@ -148,29 +169,24 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
     }
   }
 
-  private async _rebuildCard(cardElToReplace: LovelaceCard, config: LovelaceCardConfig): Promise<void> {
-    const newCardEl = await this._createCardElement(config);
-    if (cardElToReplace.parentElement) {
-      cardElToReplace.parentElement.replaceChild(newCardEl, cardElToReplace);
-    }
-    this._cards = this._cards!.map((curCardEl) => (curCardEl === cardElToReplace ? newCardEl : curCardEl));
+  private async _rebuildCard(element: LovelaceCard, config: LovelaceCardConfig): Promise<LovelaceCard> {
+    const newCard = await this._createCardElement(config);
+    element.replaceWith(newCard);
+    this._card = newCard;
+    window.setTimeout(() => {
+      this._waitForUpdate(this._card);
+    }, 500);
+    return newCard;
   }
 
+
   protected render(): TemplateResult {
-    if (!this._config || !this.hass || !this._cards) {
+    if (!this._config || !this._hass || !this._card) {
       return html``;
     }
 
     return html`<ha-card header=${this._config.title ?? null}>
-      <div
-        class=${classMap({
-          container: true,
-          vertical: this._config.horizontal == false,
-          horizontal: this._config.horizontal == true,
-        })}
-      >
-        ${this._cards}
-      </div>
+      <div>${this._card}</div>
     </ha-card>`;
   }
 
@@ -179,42 +195,6 @@ class VerticalStackInCard extends LitElement implements LovelaceCard {
       css`
         ha-card {
           overflow: hidden;
-        }
-
-        .container {
-          display: flex;
-          justify-content: flex-start;
-        }
-
-        .horizontal {
-          height: 100%;
-          flex-direction: row;
-          align-items: center;
-        }
-        .horizontal > * {
-          flex: 1 1 0;
-          margin: var(--horizontal-stack-card-margin, var(--stack-card-margin, 0 4px));
-          min-width: 0;
-        }
-        .horizontal > *:first-child {
-          margin-left: 0;
-        }
-        .horizontal > *:last-child {
-          margin-right: 0;
-        }
-        .vertical {
-          flex-direction: column;
-          height: 100%;
-          gap: 5px;
-        }
-        .vertical > * {
-          margin: var(--vertical-stack-card-margin, var(--stack-card-margin, 4px 0));
-        }
-        .vertical > *:first-child {
-          margin-top: 0;
-        }
-        .vertical > *:last-child {
-          margin-bottom: 0;
         }
       `,
     ];
