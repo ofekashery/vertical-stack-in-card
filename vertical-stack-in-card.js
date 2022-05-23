@@ -38,7 +38,7 @@ class VerticalStackInCard extends HTMLElement {
     const card = document.createElement('ha-card');
     const cardContent = document.createElement('div');
     card.header = config.title;
-    card.style.overflow = 'hidden';
+    card.style.overflow = 'visible';
     this._refCards.forEach((card) => cardContent.appendChild(card));
     if (config.horizontal) {
       cardContent.style.display = 'flex';
