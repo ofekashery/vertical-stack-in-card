@@ -181,3 +181,7 @@ class VerticalStackInCard extends HTMLElement {
 }
 
 customElements.define('vertical-stack-in-card', VerticalStackInCard);
+
+window.customElements.get('vertical-stack-in-card').getConfigElement = function() {
+  return document.createElement('hui-stack-card-editor');
+}
