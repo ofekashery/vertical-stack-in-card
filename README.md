@@ -43,7 +43,7 @@ Link `vertical-stack-in-card` inside your `ui-lovelace.yaml`
 
 ```yaml
 resources:
-  - url: /local/vertical-stack-in-card.js?v=0.4.2
+  - url: /local/vertical-stack-in-card.js?v=0.4.4
     type: js
 ```
 
