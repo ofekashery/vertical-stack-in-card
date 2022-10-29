@@ -24,7 +24,9 @@ Vertical Stack In Card allows you to group multiple cards in one card.
 
 ## Installation
 
-1. Install the `vertical-stack-in-card` card by copying `vertical-stack-in-card.js` to `<config directory>/www/vertical-stack-in-card.js`
+### 1. Download the card
+
+Install the `vertical-stack-in-card` card by copying `vertical-stack-in-card.js` to `<config directory>/www/vertical-stack-in-card.js`
 
 Bash:
 
@@ -33,15 +35,30 @@ wget https://raw.githubusercontent.com/ofekashery/vertical-stack-in-card/master/
 mv vertical-stack-in-card.js /config/www/
 ```
 
-2. Link `vertical-stack-in-card` inside your `ui-lovelace.yaml`
+### 2. Link the card to your lovelace ui
+
+#### The manual way:
+
+Link `vertical-stack-in-card` inside your `ui-lovelace.yaml`
 
 ```yaml
 resources:
-  - url: /local/vertical-stack-in-card.js?v=0.4.1
+  - url: /local/vertical-stack-in-card.js?v=0.4.2
     type: js
 ```
 
-3. Add a custom card in your `ui-lovelace.yaml`
+#### Through the GUI:
+
+Alternatively, with Home Assistant 2021.3 or later, click this button: [![My Home Assistant](https://my.home-assistant.io/badges/lovelace_resources.svg)](https://my.home-assistant.io/redirect/lovelace_resources). 
+That will bring up the GUI for Resources. Click the Plus to add a new resource. The `url` is the path to your downloaded file. Replace `<config directory>/www/` with `/local/`.  
+
+![Add Resource](https://user-images.githubusercontent.com/557102/196027109-01b3ab95-ef61-4573-9ced-71233481eb07.png). 
+
+Finish by clicking "Create" and refresh your browser
+
+### 3. Use the card somehere.
+
+Add a custom card in your `ui-lovelace.yaml`
 
 **Example**
 
