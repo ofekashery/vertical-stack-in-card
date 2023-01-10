@@ -128,6 +128,7 @@ class VerticalStackInCard extends HTMLElement {
         ele.style.boxShadow = 'none';
         ele.style.borderRadius = '0';
         ele.style.border = "none";
+        ele.style.background = 'none';
         if ('styles' in config) {
           Object.entries(config.styles).forEach(([key, value]) => ele.style.setProperty(key, value));
         }
@@ -151,6 +152,7 @@ class VerticalStackInCard extends HTMLElement {
         ele.style.boxShadow = 'none';
         ele.style.borderRadius = '0';
         ele.style.border = "none";
+        ele.style.background = 'none';
         if ('styles' in config) {
           Object.entries(config.styles).forEach(([key, value]) => ele.style.setProperty(key, value));
         }
