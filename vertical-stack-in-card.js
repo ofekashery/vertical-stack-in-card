@@ -126,7 +126,6 @@ class VerticalStackInCard extends HTMLElement {
       if (element.shadowRoot.querySelector('ha-card')) {
         let ele = element.shadowRoot.querySelector('ha-card');
         ele.style.boxShadow = 'none';
-        ele.style.borderRadius = '0';
         if ('styles' in config) {
           Object.entries(config.styles).forEach(([key, value]) => ele.style.setProperty(key, value));
         }
