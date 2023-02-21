@@ -1,4 +1,4 @@
-console.log(`%cvertical-stack-in-card\n%cVersion: ${'0.4.2'}`, 'color: #1976d2; font-weight: bold;', '');
+console.log(`%cvertical-stack-in-card\n%cVersion: ${'0.4.4'}`, 'color: #1976d2; font-weight: bold;', '');
 
 class VerticalStackInCard extends HTMLElement {
   constructor() {
@@ -126,6 +126,7 @@ class VerticalStackInCard extends HTMLElement {
       if (element.shadowRoot.querySelector('ha-card')) {
         let ele = element.shadowRoot.querySelector('ha-card');
         ele.style.boxShadow = 'none';
+        ele.style.border = "none";
         if ('styles' in config) {
           Object.entries(config.styles).forEach(([key, value]) => ele.style.setProperty(key, value));
         }
@@ -148,6 +149,7 @@ class VerticalStackInCard extends HTMLElement {
         let ele = element.querySelector('ha-card');
         ele.style.boxShadow = 'none';
         ele.style.borderRadius = '0';
+        ele.style.border = "none";
         if ('styles' in config) {
           Object.entries(config.styles).forEach(([key, value]) => ele.style.setProperty(key, value));
         }
@@ -180,3 +182,7 @@ class VerticalStackInCard extends HTMLElement {
 }
 
 customElements.define('vertical-stack-in-card', VerticalStackInCard);
+
+window.customElements.get('vertical-stack-in-card').getConfigElement = function() {
+  return document.createElement('hui-stack-card-editor');
+}
