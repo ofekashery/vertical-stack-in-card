@@ -1,5 +1,7 @@
 console.log(`%cvertical-stack-in-card\n%cVersion: ${'0.4.4'}`, 'color: #1976d2; font-weight: bold;', '');
 
+const HELPERS = window.loadCardHelpers ? window.loadCardHelpers() : undefined;
+
 class VerticalStackInCard extends HTMLElement {
   constructor() {
     super();
@@ -181,8 +183,16 @@ class VerticalStackInCard extends HTMLElement {
     return sizes.reduce((a, b) => a + b, 0);
   }
 
-  static getConfigElement() {
-    return customElements.get('hui-vertical-stack-card').getConfigElement();
+  static async getConfigElement() {
+    // Ensure hui-card-element-editor and hui-card-picker are loaded.
+    // They happen to be used by the vertical-stack card editor but there must be a better way?
+    let cls = customElements.get('hui-vertical-stack-card');
+    if (!cls) {
+      (await HELPERS).createCardElement({ type: 'vertical-stack', cards: [] });
+      await customElements.whenDefined('hui-vertical-stack-card');
+      cls = customElements.get('hui-vertical-stack-card');
+    }
+    return cls.getConfigElement();
   }
 
   static getStubConfig() {
