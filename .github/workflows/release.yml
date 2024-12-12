@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'VERSION'
+
+jobs:
+  tag-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Create Git Tag
+        id: create_tag
+        run: |
+          VERSION=$(cat VERSION)
+          git tag -a "v$VERSION" -m "Release $VERSION"
+          git push origin "v$VERSION"
+
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(cat VERSION)
+          gh release create "v$VERSION" vertical-stack-in-card.js --title "Release v$VERSION" --generate-notes
