@@ -209,4 +209,5 @@ window.customCards.push({
   name: 'Vertical Stack In Card',
   description: 'Group multiple cards into a single sleek card.',
   preview: false,
+  documentationURL: 'https://github.com/ofekashery/vertical-stack-in-card'
 });
