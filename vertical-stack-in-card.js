@@ -4,6 +4,105 @@ console.log(
   ''
 );
 
+class VerticalStackInCardEditor extends HTMLElement {
+  constructor() {
+    super();
+    this._config = {};
+    this._initialized = false;
+  }
+
+  async setConfig(config) {
+    this._config = config;
+    if (!this._initialized) {
+      await this._build();
+    } else {
+      this._sync();
+    }
+  }
+
+  async _build() {
+    this._initialized = true;
+
+    // Load the hui-vertical-stack-card editor for title + cards UI.
+    let cls = customElements.get('hui-vertical-stack-card');
+    if (!cls) {
+      const helpers = await window.loadCardHelpers();
+      helpers.createCardElement({ type: 'vertical-stack', cards: [] });
+      await customElements.whenDefined('hui-vertical-stack-card');
+      cls = customElements.get('hui-vertical-stack-card');
+    }
+    this._huiEditor = await cls.getConfigElement();
+    this._huiEditor.addEventListener('config-changed', (ev) => {
+      // Only intercept the final top-level event from the hui editor itself.
+      // Intermediate events (from child card editors, the card picker, etc.)
+      // must propagate so HA's internals keep working.
+      if (ev.detail.config.type !== 'custom:vertical-stack-in-card') return;
+      ev.stopPropagation();
+      this._fireConfigChanged({ ...this._config, ...ev.detail.config });
+    });
+
+    // Horizontal toggle row.
+    const row = document.createElement('div');
+    row.style.cssText =
+      'display:flex;align-items:center;justify-content:space-between;padding:8px 16px;';
+    const label = document.createElement('span');
+    label.textContent = 'Stack horizontally';
+    this._switch = document.createElement('ha-switch');
+    this._switch.addEventListener('change', () => {
+      const config = { ...this._config };
+      if (this._switch.checked) config.horizontal = true;
+      else delete config.horizontal;
+      this._fireConfigChanged(config);
+    });
+    row.appendChild(label);
+    row.appendChild(this._switch);
+    this.appendChild(row);
+    this.appendChild(this._huiEditor);
+
+    this._sync();
+  }
+
+  set hass(hass) {
+    this._hass = hass;
+    if (this._huiEditor) this._huiEditor.hass = hass;
+  }
+
+  // HA sets lovelace on the config element — forward it into the hui editor
+  // so hui-cards-editor and hui-card-picker receive it and work correctly.
+  set lovelace(lovelace) {
+    this._lovelace = lovelace;
+    if (this._huiEditor) this._huiEditor.lovelace = lovelace;
+  }
+
+  _sync() {
+    if (this._huiEditor) {
+      if (this._hass) this._huiEditor.hass = this._hass;
+      if (this._lovelace) this._huiEditor.lovelace = this._lovelace;
+      this._huiEditor.setConfig({
+        type: this._config.type,
+        title: this._config.title,
+        cards: this._config.cards || [],
+      });
+    }
+    if (this._switch) {
+      this._switch.checked = !!this._config.horizontal;
+    }
+  }
+
+  _fireConfigChanged(config) {
+    this._config = config;
+    this.dispatchEvent(
+      new CustomEvent('config-changed', {
+        detail: { config },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+}
+
+customElements.define('vertical-stack-in-card-editor', VerticalStackInCardEditor);
+
 class VerticalStackInCard extends HTMLElement {
   constructor() {
     super();
@@ -44,14 +143,37 @@ class VerticalStackInCard extends HTMLElement {
     const cardContent = document.createElement('div');
     card.header = config.title;
     card.style.overflow = 'hidden';
-    this._refCards.forEach((card) => cardContent.appendChild(card));
+    cardContent.style.display = 'flex';
+    // height: 100% is only appropriate for horizontal stacks, where the card
+    // should fill the grid-allocated row height. For vertical stacks, height
+    // must be content-driven (auto) — otherwise child cards that also set
+    // height: 100% (e.g. hui-horizontal-stack-card after HA 2025.x) will
+    // resolve their 100% against our container height and inflate to fill it.
     if (config.horizontal) {
-      cardContent.style.display = 'flex';
-      cardContent.childNodes.forEach((card) => {
-        card.style.flex = '1 1 0';
-        card.style.minWidth = 0;
+      card.style.height = '100%';
+      cardContent.style.height = '100%';
+    }
+
+    this._refCards.forEach((refCard) => cardContent.appendChild(refCard));
+
+    if (config.horizontal) {
+      // Proportional widths from grid_options.columns (native stack gives equal
+      // flex: 1 1 0 to all; we use columns as relative flex weights).
+      this._refCards.forEach((refCard, i) => {
+        const cols = config.cards[i]?.grid_options?.columns ?? 1;
+        refCard.style.flex = `${cols} ${cols} 0`;
+        refCard.style.minWidth = '0';
+      });
+    } else {
+      cardContent.style.flexDirection = 'column';
+      // Proportional heights from grid_options.rows; cards without rows are
+      // content-sized (flex: 0 0 auto).
+      this._refCards.forEach((refCard, i) => {
+        const rows = config.cards[i]?.grid_options?.rows;
+        refCard.style.flex = rows ? `${rows} ${rows} 0` : '0 0 auto';
       });
     }
+
     card.appendChild(cardContent);
 
     const shadowRoot = this.shadowRoot || this.attachShadow({ mode: 'open' });
@@ -162,27 +284,16 @@ class VerticalStackInCard extends HTMLElement {
     return sizes.reduce((a, b) => a + b, 0);
   }
 
-  static async getConfigElement() {
-    // Ensure the hui-stack-card-editor is loaded.
-    let cls = customElements.get('hui-vertical-stack-card');
-    if (!cls) {
-      const helpers = await window.loadCardHelpers();
-      helpers.createCardElement({ type: 'vertical-stack', cards: [] });
-      await customElements.whenDefined('hui-vertical-stack-card');
-      cls = customElements.get('hui-vertical-stack-card');
-    }
-    const configElement = await cls.getConfigElement();
+  getGridOptions() {
+    return {
+      columns: 12,
+      rows: 'auto',
+      min_columns: 3,
+    };
+  }
 
-    // Patch setConfig to remove non-VSIC config options.
-    const originalSetConfig = configElement.setConfig;
-    configElement.setConfig = (config) =>
-      originalSetConfig.call(configElement, {
-        type: config.type,
-        title: config.title,
-        cards: config.cards || [],
-      });
-
-    return configElement;
+  static getConfigElement() {
+    return document.createElement('vertical-stack-in-card-editor');
   }
 
   static getStubConfig() {
