@@ -1,7 +1,7 @@
 console.log(
-  `%cvertical-stack-in-card\n%cVersion: ${'1.0.1'}`,
+  `%cvertical-stack-in-card\n%cVersion: ${'1.1.0'}`,
   'color: #1976d2; font-weight: bold;',
-  ''
+  '',
 );
 
 class VerticalStackInCardEditor extends HTMLElement {
@@ -42,21 +42,24 @@ class VerticalStackInCardEditor extends HTMLElement {
     });
 
     // Horizontal toggle row.
-    const row = document.createElement('div');
-    row.style.cssText =
-      'display:flex;align-items:center;justify-content:space-between;padding:8px 16px;';
+    const switchContainer = document.createElement('div');
+    switchContainer.style.cssText =
+      'display:flex;align-items:center;justify-content:space-between;padding:8px 0;';
     const label = document.createElement('span');
     label.textContent = 'Stack horizontally';
-    this._switch = document.createElement('ha-switch');
-    this._switch.addEventListener('change', () => {
+    this._horizontalSwitch = document.createElement('ha-switch');
+    this._horizontalSwitch.addEventListener('change', () => {
       const config = { ...this._config };
-      if (this._switch.checked) config.horizontal = true;
-      else delete config.horizontal;
+      if (this._horizontalSwitch.checked) {
+        config.horizontal = true;
+      } else {
+        delete config.horizontal;
+      }
       this._fireConfigChanged(config);
     });
-    row.appendChild(label);
-    row.appendChild(this._switch);
-    this.appendChild(row);
+    switchContainer.appendChild(label);
+    switchContainer.appendChild(this._horizontalSwitch);
+    this.appendChild(switchContainer);
     this.appendChild(this._huiEditor);
 
     this._sync();
@@ -84,8 +87,8 @@ class VerticalStackInCardEditor extends HTMLElement {
         cards: this._config.cards || [],
       });
     }
-    if (this._switch) {
-      this._switch.checked = !!this._config.horizontal;
+    if (this._horizontalSwitch) {
+      this._horizontalSwitch.checked = !!this._config.horizontal;
     }
   }
 
@@ -96,12 +99,15 @@ class VerticalStackInCardEditor extends HTMLElement {
         detail: { config },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 }
 
-customElements.define('vertical-stack-in-card-editor', VerticalStackInCardEditor);
+customElements.define(
+  'vertical-stack-in-card-editor',
+  VerticalStackInCardEditor,
+);
 
 class VerticalStackInCard extends HTMLElement {
   constructor() {
@@ -111,7 +117,7 @@ class VerticalStackInCard extends HTMLElement {
   setConfig(config) {
     this._cardSize = {};
     this._cardSize.promise = new Promise(
-      (resolve) => (this._cardSize.resolve = resolve)
+      (resolve) => (this._cardSize.resolve = resolve),
     );
 
     if (!config || !config.cards || !Array.isArray(config.cards)) {
@@ -125,7 +131,7 @@ class VerticalStackInCard extends HTMLElement {
   async renderCard() {
     const config = this._config;
     const promises = config.cards.map((config) =>
-      this._createCardElement(config)
+      this._createCardElement(config),
     );
     this._refCards = await Promise.all(promises);
 
@@ -202,7 +208,7 @@ class VerticalStackInCard extends HTMLElement {
           this.renderCard();
         });
       },
-      { once: true }
+      { once: true },
     );
     return element;
   }
@@ -226,7 +232,7 @@ class VerticalStackInCard extends HTMLElement {
         ele.style.border = 'none';
         if ('styles' in config) {
           Object.entries(config.styles).forEach(([key, value]) =>
-            ele.style.setProperty(key, value)
+            ele.style.setProperty(key, value),
           );
         }
       } else {
@@ -254,7 +260,7 @@ class VerticalStackInCard extends HTMLElement {
         ele.style.border = 'none';
         if ('styles' in config) {
           Object.entries(config.styles).forEach(([key, value]) =>
-            ele.style.setProperty(key, value)
+            ele.style.setProperty(key, value),
           );
         }
       }
