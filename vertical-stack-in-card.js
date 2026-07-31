@@ -152,7 +152,7 @@ class VerticalStackInCard extends HTMLElement {
     const card = document.createElement('ha-card');
     const cardContent = document.createElement('div');
     card.header = config.title;
-    card.style.overflow = 'hidden';
+    card.style.overflow = 'visible';
     cardContent.style.display = 'flex';
     // height: 100% is only appropriate for horizontal stacks, where the card
     // should fill the grid-allocated row height. For vertical stacks, height
@@ -232,7 +232,6 @@ class VerticalStackInCard extends HTMLElement {
       if (element.shadowRoot.querySelector('ha-card')) {
         let ele = element.shadowRoot.querySelector('ha-card');
         ele.style.boxShadow = 'none';
-        ele.style.borderRadius = '0';
         ele.style.border = 'none';
         if ('styles' in config) {
           Object.entries(config.styles).forEach(([key, value]) =>
