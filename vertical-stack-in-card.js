@@ -196,10 +196,10 @@ class VerticalStackInCard extends HTMLElement {
   }
 }
 
-customElements.define('stack-in-card', VerticalStackInCard);
+customElements.define('vertical-stack-in-card', VerticalStackInCard);
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: 'stack-in-card',
+  type: 'vertical-stack-in-card',
   name: 'Vertical Stack In Card',
   description: 'Group multiple cards into a single sleek card.',
   preview: false,
