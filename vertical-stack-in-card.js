@@ -152,7 +152,6 @@ class VerticalStackInCard extends HTMLElement {
     const card = document.createElement('ha-card');
     const cardContent = document.createElement('div');
     card.header = config.title;
-    this._refCards.forEach((card) => cardContent.appendChild(card));
     card.style.overflow = 'visible';
     cardContent.style.display = 'flex';
     // height: 100% is only appropriate for horizontal stacks, where the card
