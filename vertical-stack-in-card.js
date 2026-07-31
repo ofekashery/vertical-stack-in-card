@@ -114,6 +114,10 @@ class VerticalStackInCard extends HTMLElement {
     super();
   }
 
+  get updateComplete() {
+    return this._cardSize.promise;
+  }
+
   setConfig(config) {
     this._cardSize = {};
     this._cardSize.promise = new Promise(
