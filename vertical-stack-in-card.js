@@ -1,5 +1,5 @@
 console.log(
-  `%cvertical-stack-in-card\n%cVersion: ${'1.1.2'}`,
+  `%cvertical-stack-in-card\n%cVersion: ${'1.1.3'}`,
   'color: #1976d2; font-weight: bold;',
   '',
 );

@@ -1,9 +1,10 @@
 # Vertical Stack In Card
 
-![Version](https://img.shields.io/github/v/release/ofekashery/vertical-stack-in-card)
-![Downloads](https://img.shields.io/github/downloads/ofekashery/vertical-stack-in-card/total)
-![Stars](https://img.shields.io/github/stars/ofekashery/vertical-stack-in-card)
-![HACS](https://img.shields.io/badge/HACS-Default-41BDF5.svg)
+![GitHub Stars](https://www.shieldcn.dev/github/stars/ofekashery/vertical-stack-in-card.svg?variant=secondary&size=xs)
+![Version](https://www.shieldcn.dev/github/release/ofekashery/vertical-stack-in-card.svg?variant=secondary&size=xs)
+![Downloads](https://www.shieldcn.dev/github/downloads/ofekashery/vertical-stack-in-card.svg?variant=secondary&size=xs)
+![CI](https://www.shieldcn.dev/github/ci/ofekashery/vertical-stack-in-card.svg?variant=secondary&size=xs)
+![HACS](https://www.shieldcn.dev/badge/HACS.svg?variant=secondary&size=xs&logo=homeassistant)
 
 **Vertical Stack In Card** is a custom Lovelace card for Home Assistant, allowing you to group multiple cards into a single sleek card. It offers a clean, organized way to display multiple cards in your Home Assistant dashboard.
 
@@ -42,7 +43,7 @@ If you configure Lovelace via YAML, add a reference to `vertical-stack-in-card.j
 
 ```yaml
 resources:
-  - url: /local/vertical-stack-in-card.js?v=1.1.2
+  - url: /local/vertical-stack-in-card.js?v=1.1.3
     type: js
 ```
 
@@ -54,7 +55,7 @@ Alternatively, if you prefer the graphical editor, use the menu to add the resou
 
 3. Click on **Add resource**, and fill out the form as follows:
 
-   - **Url:** `/local/vertical-stack-in-card.js?v=1.1.2`
+   - **Url:** `/local/vertical-stack-in-card.js?v=1.1.3`
    - **Resource type:** `JavaScript Module`
 
 4. Finish by clicking **Create** and refresh your browser.
