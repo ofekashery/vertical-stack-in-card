@@ -1,5 +1,5 @@
 console.log(
-  `%cvertical-stack-in-card\n%cVersion: ${'1.1.3'}`,
+  `%cvertical-stack-in-card\n%cVersion: ${'1.1.4'}`,
   'color: #1976d2; font-weight: bold;',
   '',
 );
@@ -280,6 +280,9 @@ class VerticalStackInCard extends HTMLElement {
   _computeCardSize(card) {
     if (typeof card.getCardSize === 'function') {
       return card.getCardSize();
+    } else if (customElements.get(card.localName)) {
+      // If the card is already defined, fallback to 1
+      return 1;
     }
     return customElements
       .whenDefined(card.localName)
