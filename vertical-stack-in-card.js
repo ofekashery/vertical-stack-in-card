@@ -187,9 +187,12 @@ class VerticalStackInCard extends HTMLElement {
     card.appendChild(cardContent);
 
     const shadowRoot = this.shadowRoot || this.attachShadow({ mode: 'open' });
-    while (shadowRoot.hasChildNodes()) {
-      shadowRoot.removeChild(shadowRoot.lastChild);
-    }
+    // Keep card-mod's <card-mod> element. card-mod adds it only once, so
+    // removing it on a rebuild (ll-rebuild) would drop this card's card_mod
+    // styles for good.
+    [...shadowRoot.childNodes].forEach((node) => {
+      if (node.localName !== 'card-mod') shadowRoot.removeChild(node);
+    });
     shadowRoot.appendChild(card);
 
     // Calculate card size
