@@ -139,6 +139,14 @@ class VerticalStackInCard extends HTMLElement {
     );
     this._refCards = await Promise.all(promises);
 
+    // hass set while the cards above were being created went to the old,
+    // empty _refCards, so hand it to them now.
+    if (this._hass) {
+      this._refCards.forEach((card) => {
+        card.hass = this._hass;
+      });
+    }
+
     // Style cards
     this._refCards.forEach((card) => {
       if (card.updateComplete) {
